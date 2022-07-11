@@ -5,11 +5,24 @@ services:
   client : 
     image : client
     build : ./client
+    depends_on : 
+      - server
     ports : 
       - "3000:3000" 
   
   server : 
-    image : server
-    build : ./server
-    ports : 
-      - "3001:3001"
+    hostname : server
+    build: ./server
+    restart: always
+    ports:
+      - "8000:8000"
+
+  mongodb:
+    hostname: mongodb
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - "27017:27017"
